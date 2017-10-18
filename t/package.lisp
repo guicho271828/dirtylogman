@@ -8,7 +8,7 @@
   (:use :cl
         :dirtylogman
         :fiveam
-        :trivia :alexandria :iterate :trivia.ppcre :ppcre))
+        :trivia :alexandria :iterate :trivia.ppcre))
 (in-package :dirtylogman.test)
 
 
