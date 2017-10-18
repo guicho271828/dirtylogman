@@ -22,9 +22,9 @@
   :author "Masataro Asai"
   :mailto "guicho2.71828@gmail.com"
   :license "LLGPL"
-  :depends-on (:trivia :alexandria :iterate :trivia.ppcre :ppcre)
+  :depends-on (:trivia :alexandria :iterate :trivia.ppcre :cl-ppcre)
   :components ((:module "src"
                 :components
                 ((:file "package"))))
-  :description "Tools for reading lots of log files"
+  :description "Command line tool for reading lots of log files"
   :in-order-to ((test-op (test-op :dirtylogman.test))))

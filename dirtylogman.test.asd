@@ -22,7 +22,4 @@
                 ((:file "package"))))
   :perform (test-op :after (op c) (eval
  (read-from-string
-  "(let ((res (5am:run :dirtylogman)))
-     (explain! res)
-     (every #'fiveam::TEST-PASSED-P res))"))
-))
+  "(5am:run! :dirtylogman)"))))

@@ -12,11 +12,8 @@ exec ros -Q -- $0 "$@"
                      (progn
                        (asdf:load-system :dirtylogman.test)
                        (eval
- (read-from-string
-  "(let ((res (5am:run :dirtylogman)))
-     (explain! res)
-     (every #'fiveam::TEST-PASSED-P res))"))
-)
+                        (read-from-string
+                         "(5am:run! :dirtylogman)")))
                    (serious-condition (c)
                      (describe c)
                      (uiop:quit 2)))
