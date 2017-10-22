@@ -1,7 +1,13 @@
 
-# Dirtylogman - Tools for reading lots of log files
+# Dirtylogman - Tools for reading lots of shitty, ill-formated log files
+
+This is a tool for people who must deal with experimental tools that were
+written by those who are not intelligent enough to get the idea of structured
+logs and spit random printf messages (mostly college graduates or old fogey, and
+they are most likely writing in C++).
 
 ## Usage
+
 
 
 ## Dependencies
