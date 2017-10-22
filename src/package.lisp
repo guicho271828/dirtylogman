@@ -5,7 +5,8 @@
 
 (in-package :cl-user)
 (defpackage dirtylogman
-  (:use :cl :trivia :alexandria :iterate :trivia.ppcre))
+  (:use :cl :trivia :alexandria :iterate :trivia.ppcre :split-sequence))
 (in-package :dirtylogman)
 
 ;; blah blah blah.
+
