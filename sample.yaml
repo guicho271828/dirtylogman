@@ -1,0 +1,50 @@
+
+# fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.ad1e.1800.4000000.out
+# fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.ad1e.1800.4000000.err
+
+pathname:
+  [fig, mode, ipc, track, domain, problem, search, timelimit, memory]:
+    - match fig - mode / ipc - track - * / doman / problem . search . timelimit . memory . *
+    # equivalent:
+    # - regex "([^-]*)-([^/]*)/([^-]*)-([^-]*)-[^/]*/([^/])*/([^.])*\.[^.]*\.([^.])*\.([^.])*\.out"
+  err:
+    - shell 'sed "s/log/err/g"'
+  plan:
+    - shell 'sed "s/log/plan.1/g"'
+time:
+  - like "Actual search time: 1.991e-05 (sec) [t=0.0441942 (sec)]" "1.991e-05"
+  # equivalent to
+  # - shell "awk '/^Actual search time:/{print $4}'"
+expansion:
+  - like "Expanded 5 state(s)." "5" :mode :around
+  # equivalent to
+  # - shell "awk '/^Expanded .* state(s)\.$/{print $2}'"
+solution:
+  - exists "Solution found!"
+  # equivalent to
+  # - shell "grep -q 'Solution Found!' ; echo $?"
+solution-count:
+  - count "Solution found!"
+  # equivalent to
+  # - shell "grep -c 'Solution Found!'"
+numline:
+  - shell "wc -l"
+
+secondary:
+  - err
+  - plan
+  
+---
+    
+mem:
+  - like "LIMIT_SH FINISHED CPU 0.26 MEM 20568 MAXMEM 20568 STALE 0 MAXMEM_RSS 3852" "3852"
+status:
+  - like "LIMIT_SH FINISHED CPU 0.26 MEM 20568 MAXMEM 20568 STALE 0 MAXMEM_RSS 3852" "FINISHED"
+  
+---
+
+cost:
+  - like "; cost = 66 (general cost)" "66" :mode :around
+  # :mode :around so that it ensures the suffix says it is a general cost
+  # If it does not match (empty string), then try the another pattern
+  - like "; cost = 66 (unit cost)" "66" :mode :around

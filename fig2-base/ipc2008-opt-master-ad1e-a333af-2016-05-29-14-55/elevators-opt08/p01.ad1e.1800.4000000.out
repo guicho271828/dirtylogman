@@ -1,0 +1,226 @@
+-*- truncate-lines : t -*- 
+ubuntu@ip-172-31-23-47
+‘/home/ubuntu/repos/torque-utils/fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.pddl’ -> ‘/tmp/doubling.QZfiZSk/p01.pddl’
+‘/home/ubuntu/repos/torque-utils/fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01-domain.pddl’ -> ‘/tmp/doubling.QZfiZSk/p01-domain.pddl’
+/tmp/doubling.QZfiZSk ~
+
+("--plain" "--search" "cached-fd-clean" "--heuristic" "h=add(cost_type=one)"
+ "--search" "eager(single(h))" "-" "p01.pddl" "p01-domain.pddl") 
+; Plain mode was activated, CAP runs only the main planner.
+("--search" "cached-fd-clean" "--heuristic" "h=add(cost_type=one)" "--search"
+ "eager(single(h))" "-" "p01.pddl" "p01-domain.pddl") 
+("p01.pddl" "p01-domain.pddl") 
+; Build date : 23:21:16 05/28, 2016
+(t=0)    finding macros...
+(t=0)    /tmp/doubling.QZfiZSk/p01.macro*.*
+(t=0)    NIL
+Safe Plain mode. Plans are not parsed, and just copied to the tmp directory without processing.
+Running limit.sh(22015): -m unlimited -t unlimited -v -o --heuristic h=add(cost_type=one) --search eager(single(h)) -- cached-fd-clean /tmp/lisptmp/plain.21991.3D15D221092F1EDD/problem.pddl /tmp/lisptmp/plain.21991.3D15D221092F1EDD/domain.pddl
+limit.sh(22015): mem: unlimited kB, time: unlimited sec
+limit.sh(22015): running at /tmp/newtmp/limit.rQ9ULrnZxX
+limit.sh(22015): command to execute: /shared/torque-utils/mwup/planner-scripts/cached-fd-clean
+limit.sh(22015): current planner options : --heuristic h=add(cost_type=one) --search eager(single(h))
+limit.sh(22015): note: time precision is 0.5 sec
+TIMEOUT_IDSTR=LIMIT_SH /shared/torque-utils/mwup/planner-scripts/timeout/timeout -x 2 -c /shared/torque-utils/mwup/planner-scripts/cached-fd-clean /tmp/lisptmp/plain.21991.3D15D221092F1EDD/problem.pddl /tmp/lisptmp/plain.21991.3D15D221092F1EDD/domain.pddl
+finding FD installation from /shared/torque-utils/mwup/planner-scripts ...
+finding FD installation from /shared/torque-utils/mwup ...
+ubuntu@ip-172-31-23-47
+md5 : 00b970860b612fc40e115df34002e013
+/shared/torque-utils/mwup/downward/fast-downward.py --translate --log-level info domain.pddl problem.pddl
+INFO     Running translator.
+INFO     translator input: ['domain.pddl', 'problem.pddl']
+INFO     translator arguments: []
+INFO     translator time limit: None
+INFO     translator memory limit: None
+INFO     callstring: /usr/bin/python /shared/torque-utils/mwup/downward/builds/release32/bin/translate/translate.py domain.pddl problem.pddl
+Parsing...
+Parsing: [0.010s CPU, 0.004s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.000s CPU, 0.000s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.000s CPU, 0.004s wall-clock]
+Preparing model... [0.000s CPU, 0.001s wall-clock]
+Generated 46 rules.
+Computing model... [0.010s CPU, 0.009s wall-clock]
+446 relevant atoms
+613 auxiliary atoms
+1059 final queue length
+1487 total queue pushes
+Completing instantiation... [0.010s CPU, 0.012s wall-clock]
+Instantiating: [0.020s CPU, 0.027s wall-clock]
+Computing fact groups...
+Finding invariants...
+12 initial candidates
+Finding invariants: [0.010s CPU, 0.003s wall-clock]
+Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
+Instantiating groups... [0.000s CPU, 0.000s wall-clock]
+Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
+Choosing groups...
+0 uncovered facts
+Choosing groups: [0.000s CPU, 0.000s wall-clock]
+Building translation key... [0.000s CPU, 0.000s wall-clock]
+Computing fact groups: [0.010s CPU, 0.004s wall-clock]
+Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
+Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
+Building mutex information...
+Building mutex information: [0.000s CPU, 0.000s wall-clock]
+Translating task...
+Processing axioms...
+Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
+Processing axioms: [0.000s CPU, 0.001s wall-clock]
+Translating task: [0.010s CPU, 0.010s wall-clock]
+0 effect conditions simplified
+0 implied preconditions added
+Detecting unreachable propositions...
+0 operators removed
+0 axioms removed
+9 propositions removed
+Detecting unreachable propositions: [0.000s CPU, 0.004s wall-clock]
+Translator variables: 9
+Translator derived variables: 0
+Translator facts: 61
+Translator goal facts: 3
+Translator mutex groups: 9
+Translator total mutex groups size: 61
+Translator operators: 270
+Translator axioms: 0
+Translator task size: 1574
+Translator peak memory: 27840 KB
+Writing output... [0.000s CPU, 0.002s wall-clock]
+Done! [0.050s CPU, 0.052s wall-clock]
+/shared/torque-utils/mwup/downward/fast-downward.py --preprocess --log-level info output.sas
+INFO     Running preprocessor (release32).
+INFO     preprocessor input: output.sas
+INFO     preprocessor arguments: []
+INFO     preprocessor time limit: None
+INFO     preprocessor memory limit: None
+INFO     callstring: /shared/torque-utils/mwup/downward/builds/release32/bin/preprocess < output.sas
+Building causal graph...
+The causal graph is not acyclic.
+9 variables of 9 necessary
+0 of 9 mutex groups necessary.
+270 of 270 operators necessary.
+0 of 0 axiom rules necessary.
+Building domain transition graphs...
+solveable in poly time 0
+Building successor generator...
+Preprocessor facts: 61
+Preprocessor derived variables: 0
+Preprocessor task size: 1513
+Writing output...
+done
+/shared/torque-utils/mwup/downward/fast-downward.py --search --validate --search-time-limit 300 --plan-file /tmp/lisptmp/plain.21991.3D15D221092F1EDD/problem.plan --log-level info output --heuristic h=add(cost_type=one) --search eager(single(h))
+INFO     Running search (release32).
+INFO     search input: output
+INFO     search arguments: ['--heuristic', 'h=add(cost_type=one)', '--search', 'eager(single(h))']
+INFO     search time limit: 300s
+INFO     search memory limit: None
+INFO     search executable: /shared/torque-utils/mwup/downward/builds/release32/bin/downward
+INFO     callstring: /shared/torque-utils/mwup/downward/builds/release32/bin/downward --heuristic 'h=add(cost_type=one)' --search 'eager(single(h))' --internal-plan-file /tmp/lisptmp/plain.21991.3D15D221092F1EDD/problem.plan < output
+time limit 300.00 -> (300, 301)
+reading input... [t=5.4029e-05 (sec)]
+done reading input! [t=0.00514561 (sec)]
+packing state variables...done! [t=0.00519267 (sec)]
+Variables: 9
+Facts: 61
+Bytes per state: 4
+Building successor generator...done! [t=0.00609125 (sec)]
+done initalizing global data [t=0.00610467 (sec)]
+Conducting best first search without reopening closed nodes, (real) bound = 2147483647
+Initializing additive heuristic...
+Simplifying 480 unary operators... done! [480 unary operators]
+New best heuristic value for add(cost_type = one): 19
+[g=0, 1 evaluated, 0 expanded, t=0.00814387 (sec), 3484 KB]
+Initial heuristic value for add(cost_type = one): 19
+New best heuristic value for add(cost_type = one): 18
+[g=9, 5 evaluated, 1 expanded, t=0.00838461 (sec), 3484 KB]
+New best heuristic value for add(cost_type = one): 16
+[g=0, 10 evaluated, 1 expanded, t=0.00872319 (sec), 3484 KB]
+New best heuristic value for add(cost_type = one): 15
+[g=9, 18 evaluated, 2 expanded, t=0.008893 (sec), 3484 KB]
+New best heuristic value for add(cost_type = one): 14
+[g=25, 26 evaluated, 2 expanded, t=0.00903579 (sec), 3484 KB]
+New best heuristic value for add(cost_type = one): 11
+[g=25, 35 evaluated, 3 expanded, t=0.00919052 (sec), 3484 KB]
+New best heuristic value for add(cost_type = one): 10
+[g=44, 46 evaluated, 4 expanded, t=0.00936125 (sec), 3484 KB]
+New best heuristic value for add(cost_type = one): 9
+[g=44, 64 evaluated, 6 expanded, t=0.0096138 (sec), 3484 KB]
+New best heuristic value for add(cost_type = one): 8
+[g=44, 81 evaluated, 8 expanded, t=0.00986006 (sec), 3484 KB]
+New best heuristic value for add(cost_type = one): 7
+[g=51, 91 evaluated, 9 expanded, t=0.0100191 (sec), 3484 KB]
+New best heuristic value for add(cost_type = one): 6
+[g=51, 105 evaluated, 10 expanded, t=0.0102381 (sec), 3484 KB]
+New best heuristic value for add(cost_type = one): 5
+[g=59, 118 evaluated, 11 expanded, t=0.0104445 (sec), 3484 KB]
+New best heuristic value for add(cost_type = one): 4
+[g=59, 129 evaluated, 12 expanded, t=0.0106147 (sec), 3484 KB]
+New best heuristic value for add(cost_type = one): 3
+[g=59, 139 evaluated, 13 expanded, t=0.0107589 (sec), 3484 KB]
+New best heuristic value for add(cost_type = one): 2
+[g=66, 151 evaluated, 14 expanded, t=0.0109092 (sec), 3484 KB]
+New best heuristic value for add(cost_type = one): 1
+[g=66, 163 evaluated, 15 expanded, t=0.0110413 (sec), 3484 KB]
+New best heuristic value for add(cost_type = one): 0
+[g=66, 185 evaluated, 16 expanded, t=0.0111675 (sec), 3484 KB]
+Solution found!
+Actual search time: 0.00292444 (sec) [t=0.011195 (sec)]
+board p2 slow0-0 n2 n0 n1 (0)
+move-up-fast fast0 n0 n8 (25)
+board p0 fast0 n8 n0 n1 (0)
+move-down-fast fast0 n8 n4 (13)
+move-up-slow slow0-0 n2 n3 (6)
+board p1 slow0-0 n3 n1 n2 (0)
+move-down-slow slow0-0 n3 n1 (7)
+leave p2 slow0-0 n1 n2 n1 (0)
+move-up-slow slow0-0 n1 n4 (8)
+leave p1 slow0-0 n4 n1 n0 (0)
+board p1 slow1-0 n4 n0 n1 (0)
+move-up-slow slow1-0 n4 n6 (7)
+leave p1 slow1-0 n6 n1 n0 (0)
+leave p0 fast0 n4 n1 n0 (0)
+Plan length: 14 step(s).
+Plan cost:  66
+Expanded 17 state(s).
+Reopened 0 state(s).
+Evaluated 185 state(s).
+Evaluations: 185
+Generated 228 state(s).
+Dead ends: 0 state(s).
+Number of registered states: 185
+Search time: 0.00447358 (sec)
+Total time: 0.0111981 (sec)
+Solution found.
+Peak memory: 3484 KB
+INFO     Running validate.
+INFO     validate input: ['domain.pddl', 'output', '/tmp/lisptmp/plain.21991.3D15D221092F1EDD/problem.plan']
+INFO     validate arguments: []
+INFO     validate time limit: None
+INFO     validate memory limit: None
+INFO     validate executable: /shared/torque-utils/mwup/downward/builds/release32/bin/validate
+INFO     callstring: /shared/torque-utils/mwup/downward/builds/release32/bin/validate domain.pddl output /tmp/lisptmp/plain.21991.3D15D221092F1EDD/problem.plan
+Error: Parser failed to read file!
+
+
+Errors: 0, warnings: 0
+Command '['/shared/torque-utils/mwup/downward/builds/release32/bin/validate', 'domain.pddl', 'output', '/tmp/lisptmp/plain.21991.3D15D221092F1EDD/problem.plan']' returned non-zero exit status 255
+common.sh(22080): forcibly killing all subprocesses
+kill -9 22261
+--------------------------------------------------------
+Result:
+Plan cost: 66
+--------------------------------------------------------
+/tmp/lisptmp/plain.21991.3D15D221092F1EDD/problem.plan
+limit.sh(22015): The program successfully finished.
+removed ‘/tmp/newtmp/limit.rQ9ULrnZxX/output’
+removed ‘/tmp/newtmp/limit.rQ9ULrnZxX/output.sas’
+removed ‘/tmp/newtmp/limit.rQ9ULrnZxX/problem.pddl’
+removed ‘/tmp/newtmp/limit.rQ9ULrnZxX/log’
+removed ‘/tmp/newtmp/limit.rQ9ULrnZxX/domain.pddl’
+removed directory: ‘/tmp/newtmp/limit.rQ9ULrnZxX’
+Running finalization
+Wall time: 1 sec
+iterator.sh(21960): real  (msec.)
+iterator.sh(21960): maxmem  (kB)
