@@ -42,7 +42,7 @@ pathname:
   [fig, mode, ipc, track, domain, problem, search, timelimit, memory]:
     - split fig - mode / ipc - track - * / domain / problem . search . timelimit . memory . *
     # equivalent:
-    # - regex "([^-]*)-([^/]*)/([^-]*)-([^-]*)-[^/]*/([^/])*/([^.])*\.[^.]*\.([^.])*\.([^.])*\.out"
+    # - regex "([^-]*)-([^/]*)/([^-]*)-([^-]*)-[^/]*/([^/])*/([^.])*\.[^.]*\.([^.])*\.([^.])*.*"
   plan:
     - shell sed s/out/plan.1/g
 time:
