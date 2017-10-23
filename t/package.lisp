@@ -111,7 +111,7 @@
          ("count" . "1")
          ("numline" . "226")
          ("cost" . "66"))
-       (process (asdf:system-relative-pathname :dirtylogman "sample.yaml") *logp*))))
+       (process (enough-namestring (asdf:system-relative-pathname :dirtylogman "sample.yaml")) *logp*))))
 
 
 
