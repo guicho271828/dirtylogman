@@ -8,7 +8,18 @@
   (:use :cl :trivia :alexandria :iterate
         :arrow-macros
         :named-readtables)
-  (:shadowing-import-from :arrow-macros :<>))
+  (:shadowing-import-from :arrow-macros :<>)
+  (:export
+   #:process-leaf
+   #:regex
+   #:split
+   #:shell
+   #:exisits
+   #:count
+   #:like
+   #:status
+   #:exists
+   #:process))
 (in-package :dirtylogman)
 
 ;; blah blah blah.

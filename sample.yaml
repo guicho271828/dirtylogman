@@ -12,7 +12,8 @@ pathname:
   plan:
     - shell sed s/log/plan.1/g
 time:
-  - like "Actual search time: 1.991e-05 (sec) [t=0.0441942 (sec)]" "1.991e-05"
+  # must be escaped because of the colon
+  - 'like "Actual search time: 1.991e-05 (sec) [t=0.0441942 (sec)]" "1.991e-05"'
   # equivalent to
   # - shell "awk '/^Actual search time:/{print $4}'"
 expansion:

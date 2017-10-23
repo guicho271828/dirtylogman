@@ -1,5 +1,4 @@
-
-;;; process-leaf operations
+;;;; process-leaf operations
 (in-package :dirtylogman)
 
 (defgeneric process-leaf (op input env variables rest))
@@ -15,7 +14,7 @@
     ((list regex)
      (nconc (map 'list #'cons
                  variables
-                 (print (nth-value 1 (ppcre:scan-to-strings regex input))))
+                 (nth-value 1 (ppcre:scan-to-strings regex input)))
             env))))
 
 ;; [fig, mode, ipc, track, domain, problem, search, timelimit, memory]:
@@ -130,15 +129,40 @@
 #+(or)
 (("numline" . "226"))
 
+;;; status
+
+(defmethod process-leaf ((op (eql 'status)) (input string) env variables commands)
+  (nconc
+   (mapcar #'cons variables
+           (list
+            (nth-value
+             2
+             (uiop:run-program commands
+                               :input (make-string-input-stream input)
+                               :output nil
+                               :error-output nil
+                               :ignore-error-status t))))
+   env))
+
+(defmethod process-leaf ((op (eql 'status)) (input pathname) env variables commands)
+  (nconc
+   (mapcar #'cons variables
+           (list
+            (nth-value
+             2
+             (uiop:run-program commands
+                               :input input
+                               :output nil
+                               :error-output nil
+                               :ignore-error-status t))))
+   env))
+
 ;;; exists
 
-(defmethod process-leaf ((op (eql 'exisits)) input env variables rest)
+(defmethod process-leaf ((op (eql 'exists)) input env variables rest)
   (match rest
     ((list line)
-     (process-leaf 'shell input env variables
-                   `("sh" "-c" ,(concatenate 'string
-                                             (shellwords:join (list "grep" "-q" line))
-                                             "; echo $?"))))))
+     (process-leaf 'status input env variables `("grep" "-q" ,line)))))
 
 ;;; count
 
@@ -154,18 +178,7 @@
   (match rest
     ((list* line target options)
      (process-leaf 'shell input env variables
-                   `("awk" ,(apply #'extract line target (mapcar #'read-from-string options)))
-                   ;; `("sh" "-c" ,(concatenate 'string "awk " (shellwords:escape (apply #'extract line target (mapcar #'read-from-string options))) " >&2"))
-                   ))))
+                   `("awk" ,(apply #'extract line target (mapcar #'read-from-string options)))))))
 
 
-#+(or)
-(process-leaf 'like
-              #p"fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.ad1e.1800.4000000.out"
-              nil
-              '("expansion")
-              '("Expanded 5 state(s)." "5"))
-
-#+(or)
-(("expansion" . "17"))
 

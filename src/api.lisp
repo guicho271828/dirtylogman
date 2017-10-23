@@ -7,7 +7,7 @@
     (hash-table (gethash key hash))
     (list
      (if (consp (first hash))
-         (cdr (assoc key hash))
+         (cdr (assoc key hash :test 'equal))
          (getf hash key)))))
 
 
@@ -46,34 +46,38 @@
          (process-secondaries primary secondaries))))))
 
 (defun process-pathname (primary input)
-  (let ((rule (gethash "pathname" primary)))
-    (process-tree (enough-namestring input) rule nil)))
+  (let ((rule (gget primary "pathname")))
+    (process-tree rule (enough-namestring input) nil)))
 
 (defun process-primary (primary input env)
-  (process-tree input primary env))
+  (process-tree primary input env))
 
 (defun process-secondaries (primary secondaries env)
   (iter (for rule in secondaries)
-        (for key in (gethash "secondary" primary))
+        (for key in (gget primary "secondary"))
         (setf env
-              (process-tree (pathname (gget env key))
-                         primary env))))
+              (process-tree primary (pathname (gget env key)) env)))
+  env)
 
-(defun process-tree (input rule env)
-  (iter (for (key matchers) in-hashtable rule)
-
-        (when (equal "pathname" key)
-          (next-iteration))
-        
-        (setf env
-              (iter (for matcher in matchers)
-                    (thereis
-                     (match (shellwords:split matcher)
-                       ((list* (read op) args)
-                        (process-leaf op
-                                      input
-                                      env 
-                                      (ensure-list key)
-                                      args))))))))
+(defun process-tree (rule input env)
+  (ematch rule
+    ((list* (cons (or "pathname" "secondary") _) rest) ;special keywords
+     (process-tree rest input env))
+    ((list* (cons key matchers) rest)
+     (process-tree
+      rest input
+      (iter (for matcher in matchers)
+            (thereis
+             (ematch (shellwords:split matcher)
+               ((list* (read op) args)
+                (print matchers)
+                (process-leaf op
+                              input
+                              env 
+                              (ensure-list key)
+                              args)))))))
+    
+    (nil
+     env)))
 
               
