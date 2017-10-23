@@ -15,15 +15,17 @@ fault, could be not. But in any case, it is almost certain that you have to
 parse some numbers out of it and possibly make a graph or some sort, most likely using a
 dirty shell script magic.
 
-This lib is an experimental library that replaces such a script. It is better
+This lib is an experimental tool for replacing such a script. It is better
 than a simple awk in a sense that it is easier to handle the common cases,
 such as matching against the pathname and also providing a quick way to split a string
 (in an inconsistent manner).
 
+    dirty -y rule.yaml [inputfiles...]
 
-To use the lib you need to provide a yaml configuration file that describes how
-to parse the log files.  In this configuration file, each hash key defines a
-"variable" that simply corresponds to a row in the resulting CSV.
+To use this tool you need to provide a yaml configuration file
+([here is the sample](sample.yaml)) which describes how to parse the log files.
+In this file, each hash key defines a "variable" that simply
+corresponds to a column in the resulting CSV.
 
 There are special variables "pathname" and "secondary", where "pathname" is
 automatically bound to the current filename and "secondary" specifies a list of
@@ -72,12 +74,21 @@ cost:
   - like "; cost = 66 (general cost)" "66" :mode :around
 ```
 
+Performance and scalability is the current concern.
+Currently, the system should be very slow (I did not benchmarked it, though).
 
+## Installation
+
++ `sudo apt install -y libyaml-0-2` (or equivalent)
++ Install [roswell](http://roswell.github.io/)
++ `ros install guicho271828/dirtylogman`
 
 ## Dependencies
+
 This library is at least tested on implementation listed below:
 
 + SBCL 1.4.0 on X86-64 Linux 4.10.0-37-generic (author's environment)
++ CCL 1.9
 
 Also, it depends on the following libraries:
 
