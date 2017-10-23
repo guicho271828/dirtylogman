@@ -7,10 +7,8 @@ pathname:
     - split fig - mode / ipc - track - * / doman / problem . search . timelimit . memory . *
     # equivalent:
     # - regex "([^-]*)-([^/]*)/([^-]*)-([^-]*)-[^/]*/([^/])*/([^.])*\.[^.]*\.([^.])*\.([^.])*\.out"
-  err:
-    - shell sed s/log/err/g
   plan:
-    - shell sed s/log/plan.1/g
+    - shell sed s/out/plan.1/g
 time:
   # must be escaped because of the colon
   - 'like "Actual search time: 1.991e-05 (sec) [t=0.0441942 (sec)]" "1.991e-05"'
@@ -32,15 +30,7 @@ numline:
   - shell wc -l
 
 secondary:
-  - err
   - plan
-  
----
-    
-mem:
-  - like "LIMIT_SH FINISHED CPU 0.26 MEM 20568 MAXMEM 20568 STALE 0 MAXMEM_RSS 3852" "3852"
-status:
-  - like "LIMIT_SH FINISHED CPU 0.26 MEM 20568 MAXMEM 20568 STALE 0 MAXMEM_RSS 3852" "FINISHED"
   
 ---
 
