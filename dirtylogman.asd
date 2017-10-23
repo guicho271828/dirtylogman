@@ -15,10 +15,8 @@
               :iterate
               :trivia.ppcre
               :cl-ppcre
-              :split-sequence
               :cl-yaml
               :arrow-macros
-              :named-readtables
               :cl-shellwords)
  :pathname "src"
  :serial t

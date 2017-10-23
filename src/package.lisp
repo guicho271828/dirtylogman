@@ -6,15 +6,13 @@
 (in-package :cl-user)
 (defpackage dirtylogman
   (:use :cl :trivia :alexandria :iterate
-        :arrow-macros
-        :named-readtables)
+        :arrow-macros)
   (:shadowing-import-from :arrow-macros :<>)
   (:export
    #:process-leaf
    #:regex
    #:split
    #:shell
-   #:exisits
    #:count
    #:like
    #:status
