@@ -10,6 +10,68 @@ they are most likely writing in C++).
 
 ## Usage
 
+Assume you have to handle a bunch of terribly formatted log files. Could be your
+fault, could be not. But in any case, it is almost certain that you have to
+parse some numbers out of it and possibly make a graph or some sort, most likely using a
+dirty shell script magic.
+
+This lib is an experimental library that replaces such a script. It is better
+than a simple awk in a sense that it is easier to handle the common cases,
+such as matching against the pathname and also providing a quick way to split a string
+(in an inconsistent manner).
+
+
+To use the lib you need to provide a yaml configuration file that describes how
+to parse the log files.  In this configuration file, each hash key defines a
+"variable" that simply corresponds to a row in the resulting CSV.
+
+There are special variables "pathname" and "secondary", where "pathname" is
+automatically bound to the current filename and "secondary" specifies a list of
+secondary files that is additionally read/analyzed and whose variables are also
+included in the CSV row. Variables for the secondary files are separated by a
+yaml multidoc separator `---`.
+
+
+``` yaml
+# fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.ad1e.1800.4000000.out
+# fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.ad1e.1800.4000000.plan.1
+
+pathname:
+  [fig, mode, ipc, track, domain, problem, search, timelimit, memory]:
+    - split fig - mode / ipc - track - * / domain / problem . search . timelimit . memory . *
+    # equivalent:
+    # - regex "([^-]*)-([^/]*)/([^-]*)-([^-]*)-[^/]*/([^/])*/([^.])*\.[^.]*\.([^.])*\.([^.])*\.out"
+  plan:
+    - shell sed s/out/plan.1/g
+time:
+  # must be escaped because of the colon
+  - 'like "Actual search time: 1.991e-05 (sec) [t=0.0441942 (sec)]" "1.991e-05"'
+  # equivalent to
+  # - shell "awk '/^Actual search time:/{print $4}'"
+expansion:
+  - like "Expanded 5 state(s)." "5"
+  # equivalent to
+  # - shell "awk '/^Expanded .* state(s)\.$/{print $2}'"
+solution:
+  - exists "Solution found!"
+  # equivalent to
+  # - shell "grep -q 'Solution Found!' ; echo $?"
+count:
+  - count "Solution found!"
+  # equivalent to
+  # - shell "grep -c 'Solution Found!'"
+numline:
+  - shell wc -l
+
+secondary:
+  - plan
+  
+---
+
+cost:
+  - like "; cost = 66 (general cost)" "66" :mode :around
+```
+
 
 
 ## Dependencies
