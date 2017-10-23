@@ -122,5 +122,9 @@
      (process-leaf 'shell input env variables
                    `("awk" ,(apply #'extract line target (mapcar #'read-from-string options)))))))
 
+;;; default
 
+(defmethod process-leaf ((op (eql 'default)) input env variables rest)
+  (nconc (mapcar #'cons variables rest)
+         env))
 

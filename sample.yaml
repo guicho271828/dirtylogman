@@ -36,3 +36,4 @@ secondary:
 
 cost:
   - like "; cost = 66 (general cost)" "66" :mode :around
+  - default -1
