@@ -109,7 +109,8 @@
          ("expansion" . "17")
          ("solution" . 0)
          ("count" . "1")
-         ("numline" . "226"))
+         ("numline" . "226")
+         ("cost" . "66"))
        (process (asdf:system-relative-pathname :dirtylogman "sample.yaml") *logp*))))
 
 

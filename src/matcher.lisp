@@ -17,19 +17,6 @@
                  (nth-value 1 (ppcre:scan-to-strings regex input)))
             env))))
 
-;; [fig, mode, ipc, track, domain, problem, search, timelimit, memory]:
-;;   - regex "([^-]*)-([^/]*)/([^-]*)-([^-]*)-[^/]*/([^/])*/([^.])*\.[^.]*\.([^.])*\.([^.])*\.out"
-#+(or)
-(process-leaf 'regex
-              "fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.ad1e.1800.4000000.out"
-              nil
-              '("fig" "mode" "ipc" "track" "domain" "problem" "search" "timelimit" "memory")
-              '("([^-]*)-([^/]*)/([^-]*)-([^-]*)-[^/]*/([^/]*)/([^.]*)\.([^.]*)\.([^.]*)\.([^.]*)\.out"))
-
-#+(or)
-(("fig" . "fig2") ("mode" . "base") ("ipc" . "ipc2008") ("track" . "opt") ("domain" . "elevators-opt08")
- ("problem" . "p01") ("search" . "ad1e") ("timelimit" . "1800") ("memory" . "4000000"))
-
 ;;; split (wrapper over regex)
 
 (defmethod process-leaf ((op (eql 'split)) input env variables rest)
@@ -40,17 +27,22 @@
         (ematch sub
           ((list* "*" next _)
            (collecting (format nil "[^~a]*" (char next 0)) into regex))
+          
+          ((list "*")
+           nil)
+          
           ((list* now next _)
            (if (member now variables :test 'equal)
                (progn
                  (assert (not (member next variables :test 'equal))
                          nil "Consecutive variables are not allowed")
                  (collecting (format nil "([^~a]*)" (char next 0)) into regex))
-               (collecting now into regex)))
+               (collecting (regex-escape now) into regex)))
+          
           ((list now)
            (if (member now variables :test 'equal)
                (collecting "(.*)" into regex)
-               (collecting now into regex))))
+               (collecting (regex-escape now) into regex))))
         (finally
          (return
            (process-leaf 'regex input env variables (list (apply #'concatenate 'string regex)))))))
