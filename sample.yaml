@@ -45,7 +45,7 @@ status:
 ---
 
 cost:
-  - like "; cost = 66 (general cost)" "66" :mode :around
+  - like "; cost = 66 (unit cost)" "66" :mode :around
   # :mode :around so that it ensures the suffix says it is a general cost
   # If it does not match (empty string), then try the another pattern
-  - like "; cost = 66 (unit cost)" "66" :mode :around
+  - like "; cost = 66 (general cost)" "66" :mode :around

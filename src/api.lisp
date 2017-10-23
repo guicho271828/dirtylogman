@@ -70,13 +70,11 @@
             (thereis
              (ematch (shellwords:split matcher)
                ((list* (read op) args)
-                (print matchers)
                 (process-leaf op
                               input
                               env 
                               (ensure-list key)
                               args)))))))
-    
     (nil
      env)))
 

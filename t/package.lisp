@@ -89,21 +89,24 @@
   
   (is (equalp '(("expansion" . "17"))
               (process-leaf 'like
-                            
+                            *logp*
                             nil
                             '("expansion")
                             '("Expanded 5 state(s)." "5")))))
 
 (test from-yaml
-  (is (equalp '(("time" . "0.00292444") ("expansion" . "-1") ("solution" . 0) ("solution-count" . "1")
-                ("numline" . "226") ("time" . "0.00292444") ("expansion" . "-1") ("solution" . 0)
-                ("solution-count" . "1") ("numline" . "226") ("time" . "0.00292444") ("expansion" . "-1")
-                ("solution" . 0) ("solution-count" . "1") ("numline" . "226")
-                ("err"
-                 . "fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.ad1e.1800.4000000.out")
-                ("plan"
-                 . "fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.ad1e.1800.4000000.out"))
-              (process (asdf:system-relative-pathname :dirtylogman "sample.yaml") *logp*))))
+  (is (alexandria:set-equal
+       '(("time" . "0.00292444") ("expansion" . "-1") ("solution" . 0) ("solution-count" . "1")
+         ("numline" . "226") ("time" . "0.00292444") ("expansion" . "-1") ("solution" . 0)
+         ("solution-count" . "1") ("numline" . "226") ("time" . "0.00292444") ("expansion" . "-1")
+         ("solution" . 0) ("solution-count" . "1") ("numline" . "226")
+         ("cost" . "66")
+         ("err"
+          . "fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.ad1e.1800.4000000.out")
+         ("plan"
+          . "fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.ad1e.1800.4000000.out"))
+       (process (asdf:system-relative-pathname :dirtylogman "sample.yaml") *logp*)
+       :test 'equal)))
 
 
 
