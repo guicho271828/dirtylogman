@@ -8,9 +8,9 @@ pathname:
     # equivalent:
     # - regex "([^-]*)-([^/]*)/([^-]*)-([^-]*)-[^/]*/([^/])*/([^.])*\.[^.]*\.([^.])*\.([^.])*\.out"
   err:
-    - shell 'sed "s/log/err/g"'
+    - shell sed s/log/err/g
   plan:
-    - shell 'sed "s/log/plan.1/g"'
+    - shell sed s/log/plan.1/g
 time:
   - like "Actual search time: 1.991e-05 (sec) [t=0.0441942 (sec)]" "1.991e-05"
   # equivalent to
@@ -28,7 +28,7 @@ solution-count:
   # equivalent to
   # - shell "grep -c 'Solution Found!'"
 numline:
-  - shell "wc -l"
+  - shell wc -l
 
 secondary:
   - err

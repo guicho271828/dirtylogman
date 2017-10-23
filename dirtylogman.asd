@@ -18,7 +18,8 @@
               :split-sequence
               :cl-yaml
               :arrow-macros
-              :named-readtables)
+              :named-readtables
+              :cl-shellwords)
  :pathname "src"
  :serial t
  :components ((:file "package")

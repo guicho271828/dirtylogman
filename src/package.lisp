@@ -5,7 +5,7 @@
 
 (in-package :cl-user)
 (defpackage dirtylogman
-  (:use :cl :trivia :alexandria :iterate :trivia.ppcre :split-sequence
+  (:use :cl :trivia :alexandria :iterate
         :arrow-macros
         :named-readtables)
   (:shadowing-import-from :arrow-macros :<>))

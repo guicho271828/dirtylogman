@@ -13,10 +13,6 @@
 
 ;;; sample yaml parse input
 
-(defun read-yaml (pathname)
-  (yaml:parse (read-file-into-string pathname)
-              :multi-document-p t))
-
 (defun alist (yaml)
   (match yaml
     ((hash-table)
@@ -26,7 +22,12 @@
            (alist cdr)))
     (_ yaml)))
 
-;; hashtable by default
+(defun read-yaml (pathname)
+  (alist
+   (yaml:parse (read-file-into-string pathname)
+               :multi-document-p t)))
+
+;; (read-yaml "sample.yaml")
 
 #+(or)
 (("numline" "shell \"wc -l\"") ("solution-count" "count \"Solution found!\"")
@@ -34,12 +35,15 @@
  ("time" "like \"Actual search time: 1.991e-05 (sec) [t=0.0441942 (sec)]\" \"1.991e-05\"")
  ("path" "concatenate _ \"/\" noise \"/\" _ \".\" _ \".\" track \"/\" steps \"-\" no \"-\" _ \"/\" _"))
 
+;;; 
+
 (defun process (yaml input)
-  (ematch (read-yaml yaml)
-    ((list* :documents primary secondaries)
-     (-<> (process-pathname primary input)
-       (process-primary primary input)
-       (process-secondaries primary secondaries)))))
+  (let ((*package* (find-package :dirtylogman)))
+    (ematch (read-yaml yaml)
+      ((list* :documents primary secondaries)
+       (->> (process-pathname primary input)
+         (process-primary primary input)
+         (process-secondaries primary secondaries))))))
 
 (defun process-pathname (primary input)
   (let ((rule (gethash "pathname" primary)))
@@ -55,10 +59,6 @@
               (process-tree (pathname (gget env key))
                          primary env))))
 
-(defreadtable rule
-  (:syntax-from :standard #\" #\')
-  (:syntax-from :standard #\" #\"))
-
 (defun process-tree (input rule env)
   (iter (for (key matchers) in-hashtable rule)
 
@@ -68,13 +68,12 @@
         (setf env
               (iter (for matcher in matchers)
                     (thereis
-                     (with-input-from-string (s matcher)
-                       (process-leaf (read s)
-                                     input
-                                     env 
-                                     (ensure-list key)
-                                     (let ((*readtable* (find-readtable 'rule)))
-                                       (iter (for o in-stream s)
-                                             (collect o))))))))))
+                     (match (shellwords:split matcher)
+                       ((list* (read op) args)
+                        (process-leaf op
+                                      input
+                                      env 
+                                      (ensure-list key)
+                                      args))))))))
 
               
