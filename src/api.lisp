@@ -1,60 +1,21 @@
 
 (in-package :dirtylogman)
 
-;;; API brainstorming
-;; as a command line tool, I decided to make the main interface as a yaml file. Below was other alternatives:
-;; Given a file... e.g.
-;; ./gaussian/latplan.puzzles.puzzle_mnist/007-003-000/puzzle_mnist_3_3_36_20000_conv_Astar.log
+(defun gget (hash key)
+  "generic hash table access"
+  (etypecase hash
+    (hash-table (gethash key hash))
+    (list
+     (if (consp (first hash))
+         (cdr (assoc key hash))
+         (getf hash key)))))
 
-
-;; access methods
-
-#|
-;; like a pattern?
-(and path
-     (concatenate _ "/" noise "/" _ "." _ "." track "/" steps "-" no "-" _ "/" _)
-     (extract (read time) "Actual search time: 1.991e-05 (sec) [t=0.0441942 (sec)]" "1.991e-05")
-     (extract (read expansion) "Expanded 5 state(s)." "5" :mode :around)
-     (exist   solution "Solution found!")
-     (count   (read solution) "Solution found!")
-     (shell "wc -l"))
-
-;; more like a dsl?
-(:as path
-     (:split _ "/" noise "/" _ "." _ "." track "/" steps "-" no "-" _ "/" _)
-     (:extract ...))
-
-;; more like yaml?
-(and path
-     (concatenate _ "/" noise "/" _ "." _ "." track "/" steps "-" no "-" _ "/" _)
-     (extract "Actual search time: 1.991e-05 (sec) [t=0.0441942 (sec)]" "1.991e-05" :as time)
-     (extract "Expanded 5 state(s)." "5" :mode :around :as expansion)
-     (exist "Solution found!" :as solution)
-     (count "Solution found!" :as solution-count)
-     (shell "wc -l"))
-
-;; path as a default?
-(concatenate _ "/" noise "/" _ "." _ "." track "/" steps "-" no "-" _ "/" _)
-(extract "Actual search time: 1.991e-05 (sec) [t=0.0441942 (sec)]" "1.991e-05" :as time)
-(extract "Expanded 5 state(s)." "5" :mode :around :as expansion)
-(exist "Solution found!" :as solution)
-(count "Solution found!" :as solution-count)
-(shell "wc -l")
-
-(concatenate _ "/" noise "/" _ "." _ "." track "/" steps "-" no "-" _ "/" _)
-(awk (like "Actual search time: 1.991e-05 (sec) [t=0.0441942 (sec)]" "1.991e-05") :as time)
-(awk (like "Expanded 5 state(s)." "5" :mode :around) :as expansion)
-(exist "Solution found!" :as solution)
-(count "Solution found!" :as solution-count)
-(shell "wc -l")
-
-|#
 
 ;;; sample yaml parse input
 
-
 (defun read-yaml (pathname)
-  (yaml:parse (read-file-into-string pathname)))
+  (yaml:parse (read-file-into-string pathname)
+              :multi-document-p t))
 
 ;; hashtable by default
 
@@ -64,6 +25,42 @@
  ("time" "like \"Actual search time: 1.991e-05 (sec) [t=0.0441942 (sec)]\" \"1.991e-05\"")
  ("path" "concatenate _ \"/\" noise \"/\" _ \".\" _ \".\" track \"/\" steps \"-\" no \"-\" _ \"/\" _"))
 
-(defun process-path (db)
-  (let ((rule (gethash "path" db)))
-    
+(defun process (yaml input)
+  (ematch (read-yaml yaml)
+    ((list* :documents primary secondaries)
+     (-<> (process-pathname primary input)
+       (process-primary primary input)
+       (process-secondaries primary secondaries)))))
+
+(defun process-pathname (primary input)
+  (let ((rule (gethash "pathname" primary)))
+    (run-match (enough-namestring input) rule nil)))
+
+(defun process-primary (primary input env)
+  (run-match input primary env))
+
+(defun process-secondaries (primary secondaries env)
+  (iter (for rule in secondaries)
+        (for key in (gethash "secondary" primary))
+        (setf env
+              (run-match (pathname (gget env key))
+                         primary env))))
+
+(defun run-match (input rule env)
+  (iter (for (key matchers) in-hashtable rule)
+
+        (when (equal "pathname" key)
+          (next-iteration))
+        
+        (setf env
+              (iter (for matcher in matchers)
+                    (thereis
+                     (with-input-from-string (s matcher)
+                       (apply (read s)
+                              input
+                              env 
+                              (ensure-list key)
+                              (iter (for o in-stream s)
+                                    (collect o)))))))))
+
+              

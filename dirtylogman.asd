@@ -16,11 +16,13 @@
               :trivia.ppcre
               :cl-ppcre
               :split-sequence
-              :cl-yaml)
+              :cl-yaml
+              :arrow-macros)
  :pathname "src"
  :serial t
  :components ((:file "package")
               (:file "util")
-              (:file "api"))
+              (:file "api")
+              (:file "matcher"))
  :description "Command line tool for reading lots of log files"
  :in-order-to ((test-op (test-op :dirtylogman.test))))

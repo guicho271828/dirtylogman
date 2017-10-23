@@ -4,7 +4,7 @@
 
 pathname:
   [fig, mode, ipc, track, domain, problem, search, timelimit, memory]:
-    - match fig - mode / ipc - track - * / doman / problem . search . timelimit . memory . *
+    - split fig - mode / ipc - track - * / doman / problem . search . timelimit . memory . *
     # equivalent:
     # - regex "([^-]*)-([^/]*)/([^-]*)-([^-]*)-[^/]*/([^/])*/([^.])*\.[^.]*\.([^.])*\.([^.])*\.out"
   err:
