@@ -11,9 +11,9 @@ writing in C++).
 ## Usage
 
 Assume you have to handle a bunch of terribly formatted log files. Could be your
-fault, could be not. But in any case, it is almost certain that you have to
-parse some numbers out of it and possibly make a graph or some sort, most likely using a
-dirty shell script magic.
+fault, could be not. But it is certain that you have to parse some numbers out
+of it and possibly make a graph or some sort, most likely using a dark magic of
+shell script.
 
 This lib is an experimental tool for replacing such a script. It is better
 than a simple awk in a sense that it is easier to handle the common cases,
