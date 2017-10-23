@@ -111,7 +111,9 @@
          ("count" . "1")
          ("numline" . "226")
          ("cost" . "66"))
-       (process (enough-namestring (asdf:system-relative-pathname :dirtylogman "sample.yaml")) *logp*))))
+       (let ((*default-pathname-defaults* (asdf:system-source-directory :dirtylogman)))
+         ;; *default-pathname-defaults* is #p"" on CCL and absolute in SBCL. huh.
+         (process (enough-namestring (asdf:system-relative-pathname :dirtylogman "sample.yaml")) *logp*)))))
 
 
 
