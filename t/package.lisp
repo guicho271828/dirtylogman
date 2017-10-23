@@ -95,6 +95,11 @@
                             '("Expanded 5 state(s)." "5")))))
 
 (test from-yaml
+  ;; chekc the behavior of set-equal
+  (is (alexandria:set-equal
+       '(("time" . "0.00292444") ("solution" . 0) ("expansion" . "-1") ("solution-count" . "1"))
+       '(("time" . "0.00292444") ("expansion" . "-1") ("solution" . 0) ("solution-count" . "1"))
+       :test 'equal))
   (is (alexandria:set-equal
        '(("time" . "0.00292444") ("expansion" . "-1") ("solution" . 0) ("solution-count" . "1")
          ("numline" . "226") ("time" . "0.00292444") ("expansion" . "-1") ("solution" . 0)
