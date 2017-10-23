@@ -78,7 +78,7 @@
                             *logp*
                             nil
                             '("count")
-                            '("Solution found"))))
+                            '("Solution found")))) ;note: without a !
   
   (is (equalp '(("found" . 0))
               (process-leaf 'exists
@@ -101,18 +101,16 @@
        '(("time" . "0.00292444") ("expansion" . "-1") ("solution" . 0) ("solution-count" . "1"))
        :test 'equal))
   
-  (is (alexandria:set-equal
-       '(("time" . "0.00292444") ("expansion" . "-1") ("solution" . 0) ("solution-count" . "1")
-         ("numline" . "226") ("time" . "0.00292444") ("expansion" . "-1") ("solution" . 0)
-         ("solution-count" . "1") ("numline" . "226") ("time" . "0.00292444") ("expansion" . "-1")
-         ("solution" . 0) ("solution-count" . "1") ("numline" . "226")
-         ("cost" . "66")
-         ("err"
-          . "fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.ad1e.1800.4000000.out")
-         ("plan"
-          . "fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.ad1e.1800.4000000.out"))
-       (process (asdf:system-relative-pathname :dirtylogman "sample.yaml") *logp*)
-       :test 'equal)))
+  (is ((lambda (a b) (alexandria:set-equal a b :test 'equal))
+       '(("fig" . "fig2") ("mode" . "base") ("ipc" . "ipc2008") ("track" . "opt") ("domain" . "elevators-opt08")
+         ("problem" . "p01") ("search" . "ad1e") ("timelimit" . "1800") ("memory" . "4000000")
+         ("plan" . "fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.ad1e.1800.4000000.plan.1")
+         ("time" . "0.00292444")
+         ("expansion" . "17")
+         ("solution" . 0)
+         ("count" . "1")
+         ("numline" . "226"))
+       (process (asdf:system-relative-pathname :dirtylogman "sample.yaml") *logp*))))
 
 
 

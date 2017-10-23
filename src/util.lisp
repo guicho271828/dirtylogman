@@ -24,16 +24,16 @@ MODE specifies which context it should consider.
     (ecase mode
       (:before (format nil "~a/^~a/{s=$~a}"
                        common
-                       (nsubseq line 0 char-pos)
+                       (shellwords:escape (nsubseq line 0 char-pos))
                        (1+ token-pos)))
       (:after (format nil "~a/~a$/{s=$~a}"
                       common
-                      (nsubseq line (+ (length target) char-pos))
+                      (shellwords:escape (nsubseq line (+ (length target) char-pos)))
                       (1+ token-pos)))
       (:around (format nil "~a/^~a.*~a$/{s=$~a}"
                        common
-                       (nsubseq line 0 char-pos)
-                       (nsubseq line (+ (length target) char-pos))
+                       (shellwords:escape (nsubseq line 0 char-pos))
+                       (shellwords:escape (nsubseq line (+ (length target) char-pos)))
                        (1+ token-pos))))))
 
 #+(or)

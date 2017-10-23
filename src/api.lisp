@@ -56,7 +56,7 @@
   (iter (for rule in secondaries)
         (for key in (gget primary "secondary"))
         (setf env
-              (process-tree primary (pathname (gget env key)) env)))
+              (process-tree rule (pathname (gget env key)) env)))
   env)
 
 (defun process-tree (rule input env)

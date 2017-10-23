@@ -15,14 +15,14 @@ time:
   # equivalent to
   # - shell "awk '/^Actual search time:/{print $4}'"
 expansion:
-  - like "Expanded 5 state(s)." "5" :mode :around
+  - like "Expanded 5 state(s)." "5"
   # equivalent to
   # - shell "awk '/^Expanded .* state(s)\.$/{print $2}'"
 solution:
   - exists "Solution found!"
   # equivalent to
   # - shell "grep -q 'Solution Found!' ; echo $?"
-solution-count:
+count:
   - count "Solution found!"
   # equivalent to
   # - shell "grep -c 'Solution Found!'"
@@ -35,7 +35,4 @@ secondary:
 ---
 
 cost:
-  - like "; cost = 66 (unit cost)" "66" :mode :around
-  # :mode :around so that it ensures the suffix says it is a general cost
-  # If it does not match (empty string), then try the another pattern
   - like "; cost = 66 (general cost)" "66" :mode :around
