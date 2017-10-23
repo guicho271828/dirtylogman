@@ -1,0 +1,37 @@
+#!/bin/sh
+#|-*- mode:lisp -*-|#
+#| <Put a one-line description here>
+exec ros -Q -- $0 "$@"
+|#
+(progn ;;init forms
+  (ros:ensure-asdf)
+  #+quicklisp (ql:quickload '(:dirtylogman :cl-csv) :silent t)
+  )
+
+(defpackage :ros.script.dirty.3717744938
+  (:use :cl :dirtylogman :trivia :iterate :cl-csv))
+(in-package :ros.script.dirty.3717744938)
+
+(defun usage ()
+  (princ "
+Usage: dirty -y rule.yaml [inputfiles...]
+"))
+
+(defvar *yaml*)
+
+(defun main (&rest argv)
+  (declare (ignorable argv))
+  (match argv
+    (nil (usage))
+    
+    ((list* "-y" yaml rest)
+     (setf *yaml* yaml)
+     (apply #'main rest))
+    
+    ((list* rest)
+     (iter (for file in rest)
+           (for result = (process (pathname *yaml*) file))
+           (when (first-iteration-p)
+             (cl-csv:write-csv-row (mapcar #'car result) :stream *standard-output*))
+           (cl-csv:write-csv-row (mapcar #'cdr result) :stream *standard-output*)))))
+;;; vim: set ft=lisp lisp:
