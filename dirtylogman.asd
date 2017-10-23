@@ -17,7 +17,8 @@
               :cl-ppcre
               :split-sequence
               :cl-yaml
-              :arrow-macros)
+              :arrow-macros
+              :named-readtables)
  :pathname "src"
  :serial t
  :components ((:file "package")

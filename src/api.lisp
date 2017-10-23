@@ -17,6 +17,15 @@
   (yaml:parse (read-file-into-string pathname)
               :multi-document-p t))
 
+(defun alist (yaml)
+  (match yaml
+    ((hash-table)
+     (alist (hash-table-alist yaml)))
+    ((cons car cdr)
+     (cons (alist car)
+           (alist cdr)))
+    (_ yaml)))
+
 ;; hashtable by default
 
 #+(or)
@@ -34,19 +43,23 @@
 
 (defun process-pathname (primary input)
   (let ((rule (gethash "pathname" primary)))
-    (run-match (enough-namestring input) rule nil)))
+    (process-tree (enough-namestring input) rule nil)))
 
 (defun process-primary (primary input env)
-  (run-match input primary env))
+  (process-tree input primary env))
 
 (defun process-secondaries (primary secondaries env)
   (iter (for rule in secondaries)
         (for key in (gethash "secondary" primary))
         (setf env
-              (run-match (pathname (gget env key))
+              (process-tree (pathname (gget env key))
                          primary env))))
 
-(defun run-match (input rule env)
+(defreadtable rule
+  (:syntax-from :standard #\" #\')
+  (:syntax-from :standard #\" #\"))
+
+(defun process-tree (input rule env)
   (iter (for (key matchers) in-hashtable rule)
 
         (when (equal "pathname" key)
@@ -56,11 +69,12 @@
               (iter (for matcher in matchers)
                     (thereis
                      (with-input-from-string (s matcher)
-                       (apply (read s)
-                              input
-                              env 
-                              (ensure-list key)
-                              (iter (for o in-stream s)
-                                    (collect o)))))))))
+                       (process-leaf (read s)
+                                     input
+                                     env 
+                                     (ensure-list key)
+                                     (let ((*readtable* (find-readtable 'rule)))
+                                       (iter (for o in-stream s)
+                                             (collect o))))))))))
 
               
