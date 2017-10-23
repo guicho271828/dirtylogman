@@ -47,28 +47,6 @@
          (return
            (process-leaf 'regex input env variables (list (apply #'concatenate 'string regex)))))))
 
-#+(or)
-(process-leaf 'split
-              "fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.ad1e.1800.4000000.out"
-              nil
-              '("fig" "mode" "ipc" "track" "domain" "problem" "search" "timelimit" "memory")
-              '("fig" "-" "mode" "/" "ipc" "-" "track" "-" "*" "/" "domain" "/" "problem" "." "search" "." "timelimit" "." "memory"
- "." "*"))
-
-#+(or)
-(("fig" . "fig2") ("mode" . "base") ("ipc" . "ipc2008") ("track" . "opt") ("domain" . "elevators-opt08")
- ("problem" . "p01") ("search" . "ad1e") ("timelimit" . "1800") ("memory" . "4000000"))
-
-#+(or)
-(process-leaf 'split
-              "aaa bbb ccc"
-              nil
-              '("a" "b" "c")
-              '("a" " " "b" " " "c"))
-
-#+(or)
-(("a" . "aaa") ("b" . "bbb") ("c" . "ccc"))
-
 ;;; shell
 
 (defmethod process-leaf ((op (eql 'shell)) (input string) env variables commands)
@@ -92,34 +70,6 @@
                               :error-output t
                               :ignore-error-status t)))
    env))
-
-;; pathname:
-;;   err:
-;;     - shell sed s/log/err/g
-
-#+(or)
-(process-leaf 'shell
-              "fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.ad1e.1800.4000000.out"
-              nil
-              '("err")
-              '("sed" "s/out/err/g"))
-
-#+(or)
-(("err" . "fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.ad1e.1800.4000000.err"))
-
-;; on file
-;; numline:
-;;   - shell wc -l
-
-#+(or)
-(process-leaf 'shell
-              #p"fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.ad1e.1800.4000000.out"
-              nil
-              '("numline")
-              '("wc" "-l"))
-
-#+(or)
-(("numline" . "226"))
 
 ;;; status
 
