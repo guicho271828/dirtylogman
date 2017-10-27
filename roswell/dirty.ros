@@ -39,10 +39,16 @@ Usage: dirty -y rule.yaml [inputfiles...]
     ((list* "-p" rest)
      ;; debug mode
      (ql:quickload :swank)
+     #+nil
+     (swank/backend:profile )
+     (uiop:symbol-call :swank/backend :profile 'uiop:run-program)
+     #+nil
+     (swank/backend:profile-package )
      (uiop:symbol-call :swank :profile-package :dirtylogman nil t)
      (unwind-protect
-          (apply #'main rest)
-       (uiop:symbol-call :swank :profile-report)))
+          (time (apply #'main rest))
+       (uiop:symbol-call :swank :profile-report)
+       (room)))
     
     ((list* rest)
      (iter (for file in rest)
