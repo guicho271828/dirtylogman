@@ -38,7 +38,7 @@ Usage: dirty -y rule.yaml [inputfiles...]
 
     ((list* "-p" rest)
      ;; debug mode
-     (ql:quickload :swank)
+     (ql:quickload :swank :silent t)
      #+nil
      (swank/backend:profile )
      (uiop:symbol-call :swank/backend :profile 'uiop:run-program)
