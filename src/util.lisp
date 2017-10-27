@@ -27,18 +27,18 @@ MODE specifies which context it should consider.
   (let* ((tokens (shellwords:split line))
          (token-pos (position target tokens :test 'equal))
          (char-pos (search target line))
-         (common "BEGINFILE{s=-1}ENDFILE{if(s==-1){print s}{exit 1}}"))
+         (common "BEGIN{s=-1}END{if(s!=0){exit 1}}"))
     (assert token-pos)
     (ecase mode
-      (:before (format nil "~a/^~a/{s=$~a}"
+      (:before (format nil "~a;/^~a/{print $~a ; s=0; exit 0}"
                        common
                        (regex-escape (nsubseq line 0 char-pos))
                        (1+ token-pos)))
-      (:after (format nil "~a/~a$/{s=$~a}"
+      (:after (format nil "~a;/~a$/{print $~a ; s=0; exit 0}"
                       common
                       (regex-escape (nsubseq line (+ (length target) char-pos)))
                       (1+ token-pos)))
-      (:around (format nil "~a/^~a.*~a$/{s=$~a}"
+      (:around (format nil "~a;/^~a.*~a$/{print $~a ; s=0; exit 0}"
                        common
                        (regex-escape (nsubseq line 0 char-pos))
                        (regex-escape (nsubseq line (+ (length target) char-pos)))

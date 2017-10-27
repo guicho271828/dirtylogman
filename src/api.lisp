@@ -67,18 +67,16 @@
      (process-tree
       rest input
       (let (delayed-error)
-        (dolist (matcher matchers)
+        (dolist (matcher matchers (error delayed-error))
           ;; previous errors are forgiven in each iteration
           (setf delayed-error nil)
           (ematch (shellwords:split matcher)
             ((list* (read op) args)
              (handler-case
-                 (return-from process-tree
+                 (return
                    (process-leaf op input env (ensure-list key) args))
                (error (c)
-                 (setf delayed-error c))))))
-        (when delayed-error
-          (signal delayed-error)))))
+                 (setf delayed-error c)))))))))
     (nil
      env)))
 
