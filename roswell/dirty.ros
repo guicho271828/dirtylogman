@@ -22,7 +22,16 @@ Usage: dirty -y rule.yaml [inputfiles...]
 (defun main (&rest argv)
   (declare (ignorable argv))
   (match argv
-    (nil (usage))
+    (nil
+     (let ((no-input t))
+       (iter (for file in-stream *standard-input* using #'read-line)
+             (for result = (process (pathname *yaml*) file))
+             (when (first-iteration-p)
+               (setf no-input nil)
+               (cl-csv:write-csv-row (mapcar #'car result) :stream *standard-output*))
+             (cl-csv:write-csv-row (mapcar #'cdr result) :stream *standard-output*))
+       (when no-input
+         (usage))))
     
     ((list* "-y" yaml rest)
      (setf *yaml* yaml)
