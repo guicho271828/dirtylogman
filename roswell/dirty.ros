@@ -45,10 +45,12 @@ Usage: dirty -y rule.yaml [inputfiles...]
      #+nil
      (swank/backend:profile-package )
      (uiop:symbol-call :swank :profile-package :dirtylogman nil t)
-     (unwind-protect
-          (time (apply #'main rest))
-       (uiop:symbol-call :swank :profile-report)
-       (room)))
+     (let ((*trace-output* *error-output*))
+       (unwind-protect
+            (time (apply #'main rest))
+         (uiop:symbol-call :swank :profile-report)
+         (let ((*standard-output* *error-output*))
+           (room)))))
     
     ((list* rest)
      (iter (for file in rest)
