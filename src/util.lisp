@@ -27,7 +27,7 @@ MODE specifies which context it should consider.
   (let* ((tokens (shellwords:split line))
          (token-pos (position target tokens :test 'equal))
          (char-pos (search target line))
-         (common "BEGINFILE{s=-1}ENDFILE{print s}"))
+         (common "BEGINFILE{s=-1}ENDFILE{if(s==-1){print s}{exit 1}}"))
     (assert token-pos)
     (ecase mode
       (:before (format nil "~a/^~a/{s=$~a}"

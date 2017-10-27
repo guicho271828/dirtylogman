@@ -56,8 +56,7 @@
             (uiop:run-program commands
                               :input (make-string-input-stream input)
                               :output '(:string :stripped t)
-                              :error-output t
-                              :ignore-error-status t)))
+                              :error-output t)))
    env))
 
 (defmethod process-leaf ((op (eql 'shell)) (input pathname) env variables commands)
@@ -67,8 +66,7 @@
             (uiop:run-program commands
                               :input input
                               :output '(:string :stripped t)
-                              :error-output t
-                              :ignore-error-status t)))
+                              :error-output t)))
    env))
 
 ;;; status

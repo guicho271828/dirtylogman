@@ -66,15 +66,19 @@
     ((list* (cons key matchers) rest)
      (process-tree
       rest input
-      (iter (for matcher in matchers)
-            (thereis
-             (ematch (shellwords:split matcher)
-               ((list* (read op) args)
-                (process-leaf op
-                              input
-                              env 
-                              (ensure-list key)
-                              args)))))))
+      (let (delayed-error)
+        (dolist (matcher matchers)
+          ;; previous errors are forgiven in each iteration
+          (setf delayed-error nil)
+          (ematch (shellwords:split matcher)
+            ((list* (read op) args)
+             (handler-case
+                 (return-from process-tree
+                   (process-leaf op input env (ensure-list key) args))
+               (error (c)
+                 (setf delayed-error c))))))
+        (when delayed-error
+          (signal delayed-error)))))
     (nil
      env)))
 
