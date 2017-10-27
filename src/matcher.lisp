@@ -100,22 +100,42 @@
 ;;; exists
 
 (defmethod process-leaf ((op (eql 'exists)) input env variables rest)
-  (match rest
+  (ematch rest
     ((list line)
      (process-leaf 'status input env variables `("grep" "-q" ,line)))))
 
 ;;; count
 
-(defmethod process-leaf ((op (eql 'count)) input env variables rest)
-  (match rest
+(defmethod process-leaf ((op (eql 'count)) (input string) env variables commands)
+  (ematch commands
     ((list line)
-     (process-leaf 'shell input env variables
-                   `("sh" "-c" ,(shellwords:join (list "grep" "-c" line)))))))
+     (nconc
+      (mapcar #'cons variables
+              (shellwords:split
+               (uiop:run-program `("sh" "-c" ,(shellwords:join (list "grep" "-c" line)))
+                                 :input (make-string-input-stream input)
+                                 :output '(:string :stripped t)
+                                 :error-output t
+                                 :ignore-error-status t)))
+      env))))
+
+(defmethod process-leaf ((op (eql 'count)) (input pathname) env variables commands)
+  (ematch commands
+    ((list line)
+     (nconc
+      (mapcar #'cons variables
+              (shellwords:split
+               (uiop:run-program `("sh" "-c" ,(shellwords:join (list "grep" "-c" line)))
+                                 :input input
+                                 :output '(:string :stripped t)
+                                 :error-output t
+                                 :ignore-error-status t)))
+      env))))
 
 ;;; like
 
 (defmethod process-leaf ((op (eql 'like)) input env variables rest)
-  (match rest
+  (ematch rest
     ((list* line target options)
      (process-leaf 'shell input env variables
                    `("awk" ,(apply #'extract line target (mapcar #'read-from-string options)))))))
