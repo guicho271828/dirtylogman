@@ -38,7 +38,8 @@
 ;;; 
 
 (defun process (yaml input)
-  (let ((*package* (find-package :dirtylogman)))
+  (let ((*package* (find-package :dirtylogman))
+        (input (pathname input)))
     (ematch (read-yaml yaml)
       ((list* :documents primary secondaries)
        (->> (process-pathname primary input)
