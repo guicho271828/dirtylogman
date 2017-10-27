@@ -1,0 +1,39 @@
+
+# fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.ad1e.1800.4000000.out
+# fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55/elevators-opt08/p01.ad1e.1800.4000000.plan.1
+
+pathname:
+  [fig, mode, ipc, track, domain, problem, search, timelimit, memory]:
+    - split fig - mode / ipc - track - * / domain / problem . search . timelimit . memory . *
+    # equivalent:
+    # - regex "([^-]*)-([^/]*)/([^-]*)-([^-]*)-[^/]*/([^/])*/([^.])*\.[^.]*\.([^.])*\.([^.])*\.out"
+  plan:
+    - shell sed s/out/plan.1/g
+time:
+  # must be escaped because of the colon
+  - 'like "Actual search time: 1.991e-05 (sec) [t=0.0441942 (sec)]" "1.991e-05"'
+  # equivalent to
+  # - shell "awk '/^Actual search time:/{print $4}'"
+expansion:
+  - like "Expanded 5 state(s)." "5"
+  # equivalent to
+  # - shell "awk '/^Expanded .* state(s)\.$/{print $2}'"
+solution:
+  - exists "Solution found!"
+  # equivalent to
+  # - shell "grep -q 'Solution Found!' ; echo $?"
+count:
+  - count "Solution found!"
+  # equivalent to
+  # - shell "grep -c 'Solution Found!'"
+numline:
+  - shell wc -l
+
+secondary:
+  - plan
+  
+---
+
+cost:
+  - like "; cost = 66 (general cost)" "66" :mode :around
+  - default NOTFOUND
