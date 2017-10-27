@@ -20,7 +20,7 @@ than a simple awk in a sense that it is easier to handle the common cases,
 such as matching against the pathname and also providing a quick way to split a string
 (in an inconsistent manner).
 
-    dirty -y sample.yaml $(find -name "*.out" fig2-base)
+    dirty -y sample.yaml $(find fig2-base -name "*.out")
 
 To use this tool you need to provide a yaml configuration file
 ([here is the sample](sample.yaml)) which describes how to parse the log files.
