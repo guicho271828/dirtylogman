@@ -33,8 +33,7 @@ Usage: dirty -y rule.yaml [inputfiles...]
        (when no-input
          (usage))))
     
-    ((list* "-y" yaml rest)
-     (setf *yaml* yaml)
+    ((list* "-y" *yaml* rest)
      (apply #'main rest))
     
     ((list* rest)
