@@ -52,7 +52,16 @@
   (if (< (length list) n)
       (nconc list (make-list (- n (length list)) :initial-element default))
       list))
-  
+
+#+debug
+(defmethod process-leaf :around ((op (eql 'shell)) input env variables commands)
+  "Sometimes the command takes >1000 ms in an unpredictable pattern"
+  (let ((s (get-internal-real-time)))
+    (unwind-protect
+         (call-next-method)
+      (let ((sec (ffloor (- (get-internal-real-time) s) internal-time-units-per-second)))
+        (format t "~a ~{~a~^ ~} ~a~%" sec commands input)))))
+
 (defmethod process-leaf ((op (eql 'shell)) (input string) env variables commands)
   (nconc
    (mapcar #'cons variables
