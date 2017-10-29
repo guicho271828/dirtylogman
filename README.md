@@ -42,16 +42,18 @@ pathname:
   [fig, mode, ipc, track, domain, problem, search, timelimit, memory]:
     - split fig - mode / ipc - track - * / domain / problem . search . timelimit . memory . *
     # equivalent:
-    # - regex "([^-]*)-([^/]*)/([^-]*)-([^-]*)-[^/]*/([^/])*/([^.])*\.[^.]*\.([^.])*\.([^.])*.*"
+    # - regex "([^-]*)-([^/]*)/([^-]*)-([^-]*)-[^/]*/([^/])*/([^.])*\.[^.]*\.([^.])*\.([^.])*\.out"
   plan:
     - shell sed s/out/plan.1/g
 time:
   # must be escaped because of the colon
   - 'like "Actual search time: 1.991e-05 (sec) [t=0.0441942 (sec)]" "1.991e-05"'
+  - default -1
   # equivalent to
   # - shell "awk '/^Actual search time:/{print $4}'"
 expansion:
   - like "Expanded 5 state(s)." "5"
+  - default -1
   # equivalent to
   # - shell "awk '/^Expanded .* state(s)\.$/{print $2}'"
 solution:
@@ -72,6 +74,9 @@ secondary:
 
 cost:
   - like "; cost = 66 (general cost)" "66" :mode :around
+  - like "; cost = 66 (unit cost)" "66" :mode :around
+  - shell wc -l
+  - default NOTFOUND
 ```
 
 Performance and scalability is the current concern.
