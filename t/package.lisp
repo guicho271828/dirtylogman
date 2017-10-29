@@ -92,7 +92,20 @@
                             *logp*
                             nil
                             '("expansion")
-                            '("Expanded 5 state(s)." "5")))))
+                            '("Expanded 5 state(s)." "5"))))
+
+  ;; experimental
+  (is (equalp '(("landscape" . "19") ("landscape" . "18") ("landscape" . "16")
+                ("landscape" . "15") ("landscape" . "14") ("landscape" . "11")
+                ("landscape" . "10") ("landscape" . "9") ("landscape" . "8")
+                ("landscape" . "7") ("landscape" . "6") ("landscape" . "5")
+                ("landscape" . "4") ("landscape" . "3") ("landscape" . "2")
+                ("landscape" . "1") ("landscape" . "0"))
+              (process-leaf 'collect-like
+                            *logp*
+                            nil
+                            '("landscape")
+                            '("100" "New best heuristic value for add(cost_type = one): 18" "18")))))
 
 (test from-yaml
   ;; chekc the behavior of set-equal

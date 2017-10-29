@@ -146,3 +146,10 @@
   (nconc (mapcar #'cons variables rest)
          env))
 
+;;; collect-like
+(defmethod process-leaf ((op (eql 'collect-like)) input env variables rest)
+  (ematch* (rest variables)
+    (((list* (read (and max (integer))) line target options)
+      (list variable))
+     (process-leaf 'shell input env (make-list max :initial-element variable)
+                   `("awk" ,(apply #'extract-all line target (mapcar #'read-from-string options)))))))

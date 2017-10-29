@@ -18,7 +18,8 @@
    #:status
    #:exists
    #:process
-   #:default))
+   #:default
+   #:collect-like))
 (in-package :dirtylogman)
 
 ;; blah blah blah.
