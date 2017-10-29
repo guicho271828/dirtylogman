@@ -17,21 +17,23 @@ exec ros -Q -- $0 "$@"
 Usage: dirty -y rule.yaml [inputfiles...]
 "))
 
-(defvar *yaml*)
+(defvar *yaml* nil)
 
 (defun main (&rest argv)
   (declare (ignorable argv))
   (match argv
     (nil
-     (let ((no-input t))
-       (iter (for file in-stream *standard-input* using #'read-line)
-             (for result = (process (pathname *yaml*) file))
-             (when (first-iteration-p)
-               (setf no-input nil)
-               (cl-csv:write-csv-row (mapcar #'car result) :stream *standard-output*))
-             (cl-csv:write-csv-row (mapcar #'cdr result) :stream *standard-output*))
-       (when no-input
-         (usage))))
+     (if *yaml*
+         (let ((no-input t))
+           (iter (for file in-stream *standard-input* using #'read-line)
+                 (for result = (process (pathname *yaml*) file))
+                 (when (first-iteration-p)
+                   (setf no-input nil)
+                   (cl-csv:write-csv-row (mapcar #'car result) :stream *standard-output*))
+                 (cl-csv:write-csv-row (mapcar #'cdr result) :stream *standard-output*))
+           (when no-input
+             (usage)))
+         (usage)))
     
     ((list* "-y" *yaml* rest)
      (apply #'main rest))
