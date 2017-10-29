@@ -72,6 +72,7 @@ secondary:
 ---
 
 cost:
+  # provides multiple parsing methods
   - like "; cost = 66 (general cost)" "66" :mode :around
   - like "; cost = 66 (unit cost)" "66" :mode :around
   - shell wc -l
