@@ -18,7 +18,7 @@ outfile=$((1 + $(basename $(ls *.log | sort -rh | head -n 1) .log)))
 #     tee $outfile.log
 
 
-( find fig2-base/ipc2008-opt-master-ad1e-a333af-2016-05-29-14-55 -name "*.out" | \
+( find fig2-base -name "*.out" | \
       time -v -o /dev/fd/2 ../roswell/dirty.ros -j 12 -y sample.yaml 2>&1 >$outfile.res ) |
     tee $outfile.log
 
