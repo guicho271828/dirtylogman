@@ -5,36 +5,53 @@ exec ros -Q -- $0 "$@"
 |#
 (progn ;;init forms
   (ros:ensure-asdf)
-  #+quicklisp (ql:quickload '(:dirtylogman :cl-csv) :silent t)
+  #+quicklisp (ql:quickload '(:dirtylogman :cl-csv :cl-cpus :lparallel) :silent t)
   )
 
 (defpackage :ros.script.dirty.3717744938
-  (:use :cl :dirtylogman :trivia :iterate :cl-csv))
+  (:use :cl :dirtylogman :trivia :iterate :cl-csv :lparallel :cl-cpus))
 (in-package :ros.script.dirty.3717744938)
 
 (defun usage ()
   (princ "
-Usage: dirty -y rule.yaml [inputfiles...]
+Usage: dirty [-j/--jobs N] -y rule.yaml [inputfiles...]
 "))
 
 (defvar *yaml* nil)
+
+(defun output (results)
+  (let ((no-input t))
+    (iter (for _result in results)
+          (for result = (force _result))
+          (when (first-iteration-p)
+            (setf no-input nil)
+            (cl-csv:write-csv-row (mapcar #'car result) :stream *standard-output*))
+          (cl-csv:write-csv-row (mapcar #'cdr result) :stream *standard-output*))
+    (when no-input
+      (usage))))
 
 (defun main (&rest argv)
   (declare (ignorable argv))
   (match argv
     (nil
      (if *yaml*
-         (let ((no-input t))
-           (iter (for file in-stream *standard-input* using #'read-line)
-                 (for result = (process (pathname *yaml*) file))
-                 (when (first-iteration-p)
-                   (setf no-input nil)
-                   (cl-csv:write-csv-row (mapcar #'car result) :stream *standard-output*))
-                 (cl-csv:write-csv-row (mapcar #'cdr result) :stream *standard-output*))
-           (when no-input
-             (usage)))
+         (output
+          (if *kernel*
+              (let ((yaml *yaml*))
+                (iter (for file in-stream *standard-input* using #'read-line)
+                      (let ((file file))
+                        (collecting (future (process (pathname yaml) file))))))
+              (iter (for file in-stream *standard-input* using #'read-line)
+                    (collecting (process (pathname *yaml*) file)))))
          (usage)))
     
+    ((list* (or "-j" "--jobs") (read (and N (integer))) rest)
+     (setf *kernel*
+           (if (plusp N)
+               (make-kernel N)
+               (make-kernel (cpus:get-number-of-processors))))
+     (apply #'main rest))
+
     ((list* "-y" *yaml* rest)
      (apply #'main rest))
 
@@ -55,9 +72,11 @@ Usage: dirty -y rule.yaml [inputfiles...]
            (room)))))
     
     ((list* rest)
-     (iter (for file in rest)
-           (for result = (process (pathname *yaml*) file))
-           (when (first-iteration-p)
-             (cl-csv:write-csv-row (mapcar #'car result) :stream *standard-output*))
-           (cl-csv:write-csv-row (mapcar #'cdr result) :stream *standard-output*)))))
+     (output (if *kernel*
+                 (let ((yaml *yaml*))
+                   (iter (for file in rest)
+                         (let ((file file))
+                           (collecting (future (process (pathname yaml) file))))))
+                 (iter (for file in rest)
+                       (collecting (process (pathname *yaml*) file))))))))
 ;;; vim: set ft=lisp lisp:
