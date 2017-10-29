@@ -48,25 +48,33 @@
            (process-leaf 'regex input env variables (list (apply #'concatenate 'string regex)))))))
 
 ;;; shell
-
+(defun ensure-length (n list &optional (default ""))
+  (if (< (length list) n)
+      (nconc list (make-list (- n (length list)) :initial-element default))
+      list))
+  
 (defmethod process-leaf ((op (eql 'shell)) (input string) env variables commands)
   (nconc
    (mapcar #'cons variables
-           (shellwords:split
-            (uiop:run-program commands
-                              :input (make-string-input-stream input)
-                              :output '(:string :stripped t)
-                              :error-output t)))
+           (ensure-length
+            (length variables)
+            (shellwords:split
+             (uiop:run-program commands
+                               :input (make-string-input-stream input)
+                               :output '(:string :stripped t)
+                               :error-output t))))
    env))
 
 (defmethod process-leaf ((op (eql 'shell)) (input pathname) env variables commands)
   (nconc
    (mapcar #'cons variables
-           (shellwords:split
-            (uiop:run-program commands
-                              :input input
-                              :output '(:string :stripped t)
-                              :error-output t)))
+           (ensure-length
+            (length variables)
+            (shellwords:split
+             (uiop:run-program commands
+                               :input input
+                               :output '(:string :stripped t)
+                               :error-output t))))
    env))
 
 ;;; status
