@@ -9,3 +9,4 @@
 .#*
 *.backup
 benchmark/fig2-base
+/dirty
