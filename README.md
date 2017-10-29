@@ -12,8 +12,7 @@ writing in C++).
 
 Assume you have to handle a bunch of terribly formatted log files. Could be your
 fault, could be not. But it is certain that you have to parse some numbers out
-of it and possibly make a graph or some sort, most likely using a dark magic of
-shell script.
+of it and plot it, using a dark magic of shell script.
 
 This lib is an experimental tool for replacing such a script. It is better
 than a simple awk in a sense that it is easier to handle the common cases,
