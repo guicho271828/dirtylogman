@@ -38,5 +38,6 @@ secondary:
 
 cost:
   - like "; cost = 66 (general cost)" "66" :mode :around
+  - like "; cost = 66 (unit cost)" "66" :mode :around
   - shell wc -l
   - default NOTFOUND
