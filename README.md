@@ -4,7 +4,7 @@
 [![Build Status](https://travis-ci.org/guicho271828/dirtylogman.svg?branch=master)](https://travis-ci.org/guicho271828/dirtylogman)
 
 This is a tool for people who must deal with the programs written by those who
-are not intelligent enough to get the idea of structured logs and spit random
+cannot get the idea of structured logs and spit random
 printf messages (mostly college graduates or old fogey, and they are most likely
 writing in C++).
 
